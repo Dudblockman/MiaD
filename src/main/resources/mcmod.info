@@ -1,0 +1,16 @@
+[
+{
+  "modid": "miad",
+  "name": "Mod is a Dud",
+  "description": "Modding test",
+  "version": "${version}",
+  "mcversion": "${mcversion}",
+  "url": "",
+  "updateUrl": "",
+  "authorList": ["Dudblockman"],
+  "credits": "",
+  "logoFile": "",
+  "screenshots": [],
+  "dependencies": []
+}
+]
