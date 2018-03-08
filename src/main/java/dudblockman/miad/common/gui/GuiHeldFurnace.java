@@ -11,7 +11,7 @@ public class GuiHeldFurnace extends GuiFurnace {
 
 	public GuiHeldFurnace(EntityPlayer player, World world, EnumHand hand) {
 		super(player.inventory, new InventoryBasic("Furnace", false, 3));
-		this.inventorySlots = new ContainerHeldBench(player, world, hand);
+		this.inventorySlots = new ContainerHeldFurnace(player, world, hand);
 	}
 
 }
