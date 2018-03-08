@@ -1,5 +1,6 @@
 package dudblockman.miad;
 
+import dudblockman.miad.proxy.CommonProxy;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.Mod.EventHandler;
 import net.minecraftforge.fml.common.Mod.Instance;
@@ -9,16 +10,18 @@ import net.minecraftforge.fml.common.event.FMLPostInitializationEvent;
 import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
 import net.minecraftforge.fml.common.network.NetworkRegistry;
 
-import dudblockman.miad.common.util.Reference;
-import dudblockman.miad.proxy.CommonProxy;
-
-@Mod(modid = Reference.MODID, name = Reference.NAME, version = Reference.VERSION)
+@Mod(modid = MiaD.MODID, name = MiaD.NAME, version = MiaD.VERSION)
 public class MiaD
 {
+	
+    public static final String MODID = "MiaD";
+    public static final String NAME = "My imaginary angry Duck";
+    public static final String VERSION = "0.0.1";
+	
     @Instance
     public static MiaD instance;
     
-    @SidedProxy(clientSide = Reference.CLIENT_PROXY_CLASS, serverSide = Reference.SERVER_PROXY_CLASS)
+    @SidedProxy(clientSide = "dudblockman.miad.proxy.ClientProxy", serverSide = "dudblockman.miad.proxy.CommonProxy")
     public static CommonProxy proxy;
 
     @EventHandler
