@@ -9,7 +9,7 @@ import net.minecraft.block.material.Material;
 
 public class BlockInit {
 	public static final List<Block> BLOCKS = new ArrayList<Block>();
-	
+
 	public static final Block MyBlock = new BlockBase("dudblock", Material.IRON);
 
 }
