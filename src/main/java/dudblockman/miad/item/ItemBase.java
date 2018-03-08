@@ -1,12 +1,12 @@
-package dudblockman.miad.common.items;
+package dudblockman.miad.item;
 
-import dudblockman.miad.MiaD;
-import dudblockman.miad.common.util.IHasModel;
 import dudblockman.miad.init.ItemInit;
+import dudblockman.miad.util.IHasModel;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.item.Item;
 
 public class ItemBase extends Item implements IHasModel {
+
 	public ItemBase(String name) {
 		setUnlocalizedName(name);
 		setRegistryName(name);
@@ -14,8 +14,4 @@ public class ItemBase extends Item implements IHasModel {
 		ItemInit.ITEMS.add(this);
 	}
 
-	@Override
-	public void registerModels() {
-		MiaD.proxy.registerItemRenderer(this, 0, "inventory");
-	}
 }

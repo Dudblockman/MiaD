@@ -1,6 +1,6 @@
 {
     "parent": "item/generated",
     "textures": {
-        "layer0":"pockettiles:items/crafting_table_top"
+        "layer0":"blocks/crafting_table_top"
     }
 }

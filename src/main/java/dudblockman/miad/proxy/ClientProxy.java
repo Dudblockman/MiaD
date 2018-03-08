@@ -1,42 +1,27 @@
 package dudblockman.miad.proxy;
 
-import dudblockman.miad.client.gui.GuiWorkbench;
-import dudblockman.miad.common.items.IItemGUI;
-import net.minecraft.client.renderer.block.model.ModelResourceLocation;
-import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.inventory.EntityEquipmentSlot;
+import dudblockman.miad.init.BlockInit;
+import dudblockman.miad.init.ItemInit;
+import dudblockman.miad.util.IHasModel;
+import net.minecraft.block.Block;
 import net.minecraft.item.Item;
-import net.minecraft.item.ItemStack;
-import net.minecraft.world.World;
-import net.minecraftforge.client.model.ModelLoader;
+import net.minecraftforge.client.event.ModelRegistryEvent;
+import net.minecraftforge.common.MinecraftForge;
+import net.minecraftforge.fml.common.event.FMLPreInitializationEvent;
+import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
 public class ClientProxy extends CommonProxy {
-	@Override
-	public void registerItemRenderer(Item item, int meta, String id) {
-		ModelLoader.setCustomModelResourceLocation(item, meta, new ModelResourceLocation(item.getRegistryName(), id));
-	}
 
 	@Override
-	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int x, int y, int z) {
-
-		EntityEquipmentSlot slot = EntityEquipmentSlot.values()[ID / 100];
-		System.out.println("GUIc" + Integer.toString(ID));
-		ID %= 100;//Slot determined, get actual ID
-		ItemStack item = player.getItemStackFromSlot(slot);
-		if (!item.isEmpty() && item.getItem() instanceof IItemGUI && ((IItemGUI) item.getItem()).getGuiID(item) == ID) { return new GuiWorkbench(player.inventory, world, slot, item); }
-
-		//		item = ItemStack.EMPTY;
-		//		for (EnumHand hand : EnumHand.values())
-		//		{
-		//			ItemStack held = player.getHeldItem(hand);
-		//			if(!held.isEmpty() && held.getItem() instanceof IItemGUI && ((IItemGUI)held.getItem()).getGuiID(held)==ID)
-		//				item = held;
-		//		}
-		//		if(!item.isEmpty())
-		//		{
-		//
-		//		}
-		return null;
+	public void preInit(FMLPreInitializationEvent e) {
+		MinecraftForge.EVENT_BUS.register(this);
 	}
 
+	@SubscribeEvent
+	public void models(ModelRegistryEvent e) {
+		for (Item i : ItemInit.ITEMS)
+			if (i instanceof IHasModel) ((IHasModel) i).initModels(e);
+		for (Block b : BlockInit.BLOCKS)
+			if (b instanceof IHasModel) ((IHasModel) b).initModels(e);
+	}
 }
