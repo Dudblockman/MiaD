@@ -1,0 +1,7 @@
+//Items
+item.duditem.name=Dud Item
+item.crafter.name=Portable Crafting Table
+item.smelter.name=Portable Furnace
+
+//Blocks
+tile.dudblock.name=Dud Block
