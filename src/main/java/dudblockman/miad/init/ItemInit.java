@@ -13,4 +13,5 @@ public class ItemInit {
 	public static final Item MyItem = new ItemBase("duditem");
 	public static final Item PortCraft = new ItemCrafting("crafter");
 	public static final Item PortFurnace = new ItemFurnace("smelter");
+	public static final Item Cap = new ItemCapacitor("capacitor");
 }
