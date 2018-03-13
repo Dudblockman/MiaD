@@ -1,10 +1,6 @@
 package dudblockman.miad.jei;
 
-<<<<<<< HEAD
 import dudblockman.miad.common.gui.ContainerHeldBench;
-=======
-import dudblockman.miad.gui.ContainerHeldBench;
->>>>>>> origin/master
 import mezz.jei.api.IModPlugin;
 import mezz.jei.api.IModRegistry;
 import mezz.jei.api.JEIPlugin;

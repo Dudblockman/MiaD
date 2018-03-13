@@ -1,16 +1,21 @@
 package dudblockman.miad.common.item;
 
-import dudblockman.miad.util.IHasRecipe;
-import net.minecraft.creativetab.CreativeTabs;
-import net.minecraft.init.Blocks;
-import net.minecraft.init.Items;
-import net.minecraft.item.ItemStack;
-import net.minecraft.item.crafting.IRecipe;
-import net.minecraftforge.energy.IEnergyStorage;
-import net.minecraftforge.event.RegistryEvent.Register;
-import net.minecraftforge.fml.common.registry.GameRegistry;
+import java.text.NumberFormat;
+import java.util.List;
 
-public class ItemCapacitor extends ItemBase implements IEnergyStorage {
+import dudblockman.miad.common.energy.ItemEnergyStorage;
+import net.minecraft.creativetab.CreativeTabs;
+import net.minecraft.entity.player.EntityPlayer;
+import net.minecraft.item.ItemStack;
+import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.util.EnumFacing;
+import net.minecraftforge.common.capabilities.Capability;
+import net.minecraftforge.common.capabilities.ICapabilityProvider;
+import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraftforge.energy.IEnergyStorage;
+
+
+public class ItemCapacitor extends ItemBase {
 
     protected int energy;
     protected int capacity;
@@ -22,60 +27,83 @@ public class ItemCapacitor extends ItemBase implements IEnergyStorage {
 		setMaxStackSize(1);
 		setMaxDamage(1600);
 		setNoRepair();
-		setCreativeTab(CreativeTabs.TOOLS);
 		
         this.capacity = 1000000;
-        this.maxReceive = 160;
-        this.maxExtract = 80;
+        this.maxReceive = 1600;
+        this.maxExtract = 800;
         this.energy = Math.max(0 , Math.min(capacity, energy));
+        
 	}
-
-    @Override
-    public int receiveEnergy(int maxReceive, boolean simulate)
+	
+	@Override
+	public boolean showDurabilityBar(ItemStack stack) {
+		return true;
+	}
+	
+	@Override
+    public double getDurabilityForDisplay(ItemStack stack)
     {
-        if (!canReceive())
-            return 0;
-
-        int energyReceived = Math.min(capacity - energy, Math.min(this.maxReceive, maxReceive));
-        if (!simulate)
-            energy += energyReceived;
-        return energyReceived;
+        if(stack.hasCapability(CapabilityEnergy.ENERGY, null)){
+            IEnergyStorage storage = stack.getCapability(CapabilityEnergy.ENERGY, null);
+            if(storage != null){
+            	return 1.0 - (storage.getEnergyStored() / (double) storage.getMaxEnergyStored());
+            }
+        }
+        return 1.0;
+    }
+	//@Override
+	public void addInformation(ItemStack stack, EntityPlayer player, List list, boolean bool){
+        if(stack.hasCapability(CapabilityEnergy.ENERGY, null)){
+            IEnergyStorage storage = stack.getCapability(CapabilityEnergy.ENERGY, null);
+            if(storage != null){
+                NumberFormat format = NumberFormat.getInstance();
+                list.add(format.format(storage.getEnergyStored())+"/"+format.format(storage.getMaxEnergyStored()));
+            }
+        }
     }
 
     @Override
-    public int extractEnergy(int maxExtract, boolean simulate)
-    {
-        if (!canExtract())
-            return 0;
-
-        int energyExtracted = Math.min(energy, Math.min(this.maxExtract, maxExtract));
-        if (!simulate)
-            energy -= energyExtracted;
-        return energyExtracted;
+    public ICapabilityProvider initCapabilities(ItemStack stack, NBTTagCompound nbt){
+        return new EnergyCapabilityProvider(stack, this);
     }
 
-    @Override
-    public int getEnergyStored()
-    {
-        return energy;
-    }
+    private static class EnergyCapabilityProvider implements ICapabilityProvider{
+    	public final ItemEnergyStorage storage;
 
-    @Override
-    public int getMaxEnergyStored()
-    {
-        return capacity;
-    }
+		public EnergyCapabilityProvider(final ItemStack stack, ItemCapacitor item){
+			this.storage = new ItemEnergyStorage(item.capacity, item.maxReceive, item.maxExtract){
+                @Override
+                public int getEnergyStored(){
+                    if(stack.hasTagCompound()){
+                        return stack.getTagCompound().getInteger("Energy");
+                    }
+                    else{
+                        return 0;
+                    }
+                }
 
-    @Override
-    public boolean canExtract()
-    {
-        return this.maxExtract > 0;
-    }
+                @Override
+                public void setEnergyStored(int energy){
+                    if(!stack.hasTagCompound()){
+                        stack.setTagCompound(new NBTTagCompound());
+                    }
 
-    @Override
-    public boolean canReceive()
-    {
-        return this.maxReceive > 0;
-    }
+                    stack.getTagCompound().setInteger("Energy", energy);
+                }
+            };
+         }
+		@Override
+		public boolean hasCapability(Capability<?> capability, EnumFacing facing) {
+			return this.getCapability(capability, facing) != null;
+		}
 
+		@Override
+		public <T> T getCapability(Capability<T> capability, EnumFacing facing) {
+			if(capability == CapabilityEnergy.ENERGY){
+                return (T)this.storage;
+            }
+            return null;
+		}
+    	
+    }
 }
