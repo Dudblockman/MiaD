@@ -21,7 +21,6 @@ public class ItemFurnace extends ItemBase implements IHasRecipe {
 		setMaxStackSize(1);
 		setMaxDamage(1600);
 		setNoRepair();
-		setCreativeTab(CreativeTabs.TOOLS);
 	}
 
 	@Override

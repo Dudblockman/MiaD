@@ -1,5 +1,6 @@
 package dudblockman.miad;
 
+import dudblockman.miad.creativetabs.TabMiaD;
 import dudblockman.miad.init.BlockInit;
 import dudblockman.miad.init.ItemInit;
 import dudblockman.miad.proxy.CommonProxy;
@@ -7,6 +8,7 @@ import dudblockman.miad.util.IHasRecipe;
 import net.minecraft.block.Block;
 import net.minecraft.item.Item;
 import net.minecraft.item.crafting.IRecipe;
+import net.minecraft.creativetab.CreativeTabs;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.RegistryEvent.Register;
 import net.minecraftforge.fml.common.Mod;
@@ -25,7 +27,7 @@ public class MiaD {
 	public static final String MODID = "miad";
 	public static final String NAME = "Mod is a Dud";
 	public static final String VERSION = "0.0.1";
-
+	public static final CreativeTabs creativetab = new TabMiaD();
 	@Instance
 	public static MiaD instance;
 
